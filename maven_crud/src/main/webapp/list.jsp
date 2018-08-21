@@ -25,7 +25,7 @@
 							class="icon-bar"></span> <span class="icon-bar"></span> <span
 							class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#">学生信息管理系统</a>
+					<a class="navbar-brand" href="#">用户信息管理系统</a>
 				</div>
 
 				<!-- Collect the nav links, forms, and other content for toggling -->
