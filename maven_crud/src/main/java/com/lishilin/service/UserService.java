@@ -1,8 +1,8 @@
 package com.lishilin.service;
 
-import com.lishilin.domain.User;
+import com.lishilin.domain.Users;
 
 public interface UserService {
 
-    User selectByPrimaryKey(Integer id);
+    Users selectByPrimaryKey(Integer id);
 }

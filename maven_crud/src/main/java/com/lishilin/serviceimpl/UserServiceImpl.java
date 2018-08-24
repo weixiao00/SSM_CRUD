@@ -1,7 +1,7 @@
 package com.lishilin.serviceimpl;
 
-import com.lishilin.dao.UserMapper;
-import com.lishilin.domain.User;
+import com.lishilin.dao.UsersMapper;
+import com.lishilin.domain.Users;
 import com.lishilin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserMapper userMapper;
+    private UsersMapper userMapper;
 
-    public User selectByPrimaryKey(Integer id){
+    public Users selectByPrimaryKey(Integer id){
         return userMapper.selectByPrimaryKey(id);
     }
 }

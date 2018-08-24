@@ -53,7 +53,7 @@
       <version>5.0.7.RELEASE</version>
     </dependency>
 
-    <!--mabatis jar包-->
+    <!--mybatis jar包-->
     <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
     <dependency>
       <groupId>org.mybatis</groupId>
