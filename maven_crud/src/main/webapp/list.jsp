@@ -78,6 +78,8 @@
 					<td>ID</td>
 					<td>USERNAME</td>
 					<td>PASSWORD</td>
+					<td>AGE</td>
+					<td>ADDRESS</td>
 					<td>&nbsp;&nbsp;操作</td>
 				    </tr>
 				</thead>
@@ -173,17 +175,16 @@
 	<script type="text/javascript">
 		$(function(){
 			get_listInfo(1);
-			alert("33333");
 		});
 
 		//发送ajax数据方法
-		function get_listInfo(pageCount){
+		function get_listInfo(currentPage){
 			$.ajax({
 				method: "GET",
 				url: "list",
-				data: "pageCount="+pageCount,
+				data: "currentPage="+currentPage,
 				success: function(data){
-					//取出用户数据放在tbody里
+					// 取出用户数据放在tbody里
 					show_userinfo(data);
 					//取出分页数据放在分页里
 					page_nav_info(data);
@@ -196,22 +197,25 @@
 			$("#user_list").empty();
 			//获取tbody标签
 			var tbody = $("#user_list");
-			//each(list,function(index,item))
-			$.each(data.infomap.pageinfo.list,function(index,item){
+			$.each(data.infomap.pageInfo.list,function(index,item){
 				//被循环的行
 				var user_list_tr = $("<tr></tr>");
 				//行中的列
 				var userID = $("<td></td>").append(item.id);
-				var userUSERNAME = $("<td></td>").append(item.user);
+				var userUSERNAME = $("<td></td>").append(item.username);
 				var userPASSWORD = $("<td></td>").append(item.password);
+				var userAddress = $("<td></td>").append(item.address);
+				var userAge = $("<td></td>").append(item.age);
 				var userbtn_update = $("<button></button>").addClass("btn btn-primary").append("修改").append($("<span></span>").addClass("glyphicon glyphicon-pencil"));
 				var userbtn_delete = $("<button></button>").addClass("btn btn-danger").append("删除").append($("<span></span>").addClass("glyphicon glyphicon-trash"));
 				//将列加入到行中
 				user_list_tr.append(userID);
 				user_list_tr.append(userUSERNAME);
-				user_list_tr.append(userPASSWORD);
-				user_list_tr.append(userbtn_update);
-				user_list_tr.append("&nbsp;");
+                user_list_tr.append(userPASSWORD);
+                user_list_tr.append(userAge);
+                user_list_tr.append(userAddress);
+                user_list_tr.append(userbtn_update);
+                user_list_tr.append("&nbsp;");
 				user_list_tr.append(userbtn_delete);
 				//将行加入到tbody里
 				tbody.append(user_list_tr);
@@ -224,20 +228,20 @@
 			$("#page_nav_info").empty();//清理掉之前的数据,通过jquery写的需要清理掉
 			var page_nav_pre = $("#page_nav_pre");
 			//判断是否是首页
-			if(data.infomap.pageinfo.isFirstPage){
+			if(data.infomap.pageInfo.isFirstPage){
 				page_nav_pre.addClass("disabled");
 			}
 			else{//不是第一页可以点击，发送AJAX请求到controller
 				page_nav_pre.click(function(){
 				$("#page_nav_info").removeClass();
-				get_listInfo(data.infomap.pageinfo.pageNum-1);
+				get_listInfo(data.infomap.pageInfo.pageNum-1);
 				});
 			}
 			//循环页码
-			$.each(data.infomap.pageinfo.navigatepageNums,function(index,item){
+			$.each(data.infomap.pageInfo.navigatepageNums,function(index,item){
 				var page_nav_li = $("<li></li>").append($("<a>"+item+"</a>"));
 				//将创建的标签放到中间的页码标签中
-				if(data.infomap.pageinfo.pageNum == item){
+				if(data.infomap.pageInfo.pageNum == item){
 					page_nav_li.addClass("active");
 				}
 				//点击页码发送AJAX请求
@@ -249,12 +253,12 @@
 
 			//下一页标签
 			var page_nav_next = $("#page_nav_next");
-			if(data.infomap.pageinfo.isLastPage){
+			if(data.infomap.pageInfo.isLastPage){
 				page_nav_next.addClass("disabled");
 			}
 			else{
 				page_nav_next.click(function(){
-					get_listInfo(data.infomap.pageinfo.pageNum+1);
+					get_listInfo(data.infomap.pageInfo.pageNum+1);
 				});
 			}
 		}

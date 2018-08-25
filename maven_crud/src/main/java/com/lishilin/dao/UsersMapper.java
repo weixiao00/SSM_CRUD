@@ -1,7 +1,10 @@
 package com.lishilin.dao;
 
 import com.lishilin.domain.Users;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
+@Repository
 public interface UsersMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +17,6 @@ public interface UsersMapper {
     int updateByPrimaryKeySelective(Users record);
 
     int updateByPrimaryKey(Users record);
+
+    List<Users> selectUsers();
 }

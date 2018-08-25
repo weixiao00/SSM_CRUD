@@ -21,6 +21,7 @@
     <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactoryBean">
         <property name="dataSource" ref="comboPooledDataSource"></property>
         <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+        <property name="configLocation" value="classpath:config.xml"></property>
     </bean>
     <!--配置mybatis和spring的整合-->
     <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
