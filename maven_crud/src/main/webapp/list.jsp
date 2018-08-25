@@ -83,10 +83,10 @@
 				</thead>
 				<tbody id="user_list">
 				</tbody>
-				
-				
-				
-				
+
+
+
+
 <%-- 				<c:forEach items="${pageInfo.list }" var="user"> --%>
 <!-- 					<tr> -->
 <%-- 						<td>${user.id }</td> --%>
@@ -124,7 +124,7 @@
 <!-- 						<li class="disabled"><a href="###" aria-label="Previous"> -->
 <!-- 								<span aria-hidden="true">&laquo;</span> -->
 <!-- 						</a></li> -->
-						
+
 <%-- 					</c:if> --%>
 <%-- 					<c:if test="${!pageInfo.isFirstPage }"> --%>
 						<li id="page_nav_pre" class="nav"><a aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
@@ -132,8 +132,8 @@
 						</ul>
 <%-- 					</c:if> --%>
 						<!-- 上一页结束 -->
-						
-						
+
+
 						<!-- 中间页 -->
 						<ul class="pagination" id="page_nav_info">
 <%-- 					<c:forEach items="${pageInfo.navigatepageNums }" --%>
@@ -148,8 +148,8 @@
 <%-- 					</c:forEach> --%>
 						</ul>
 						<!-- 中间页结束 -->
-						
-						
+
+
 <%-- 					<c:if test="${pageInfo.isLastPage }"> --%>
 <!-- 						<li class="disabled"><a href="###" aria-label="Next">  <span -->
 <!-- 								aria-hidden="true">&raquo;</span> -->
@@ -169,12 +169,13 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<script type="text/javascript">
 		$(function(){
 			get_listInfo(1);
+			alert("33333");
 		});
-		
+
 		//发送ajax数据方法
 		function get_listInfo(pageCount){
 			$.ajax({
@@ -189,7 +190,7 @@
 				}
 			});
 		}
-		
+
 		//将取出的数据放到数据区
 		function show_userinfo(data){
 			$("#user_list").empty();
@@ -216,7 +217,7 @@
 				tbody.append(user_list_tr);
 			});
 		}
-		
+
 		//将取出的分页数据放到分页区
 		function page_nav_info(data){
 			//上一页标签
@@ -234,7 +235,7 @@
 			}
 			//循环页码
 			$.each(data.infomap.pageinfo.navigatepageNums,function(index,item){
-				var page_nav_li = $("<li></li>").append($("<a>"+item+"</a>"));	
+				var page_nav_li = $("<li></li>").append($("<a>"+item+"</a>"));
 				//将创建的标签放到中间的页码标签中
 				if(data.infomap.pageinfo.pageNum == item){
 					page_nav_li.addClass("active");
@@ -245,7 +246,7 @@
 				});
 				$("#page_nav_info").append(page_nav_li);
 			})
-			
+
 			//下一页标签
 			var page_nav_next = $("#page_nav_next");
 			if(data.infomap.pageinfo.isLastPage){
