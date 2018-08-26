@@ -113,11 +113,76 @@
 			</table>
 		</div>
 		<div class="row">
+			<!--新增用户按钮开始-->
 			<div class="col-md-8">
-				<a href="insert.jsp"><button type="button" class="btn btn-info">
+				<button type="button" class="btn btn-info">
 						<span class="glyphicon glyphicon-plus" aria-hidden="true">添加用户</span>
-					</button></a>
+				</button>
 			</div>
+			<!--新增用户按钮结束-->
+
+			<!-- 新增用户框 开始-->
+
+			<div class="modal fade" tabindex="-1" role="dialog" id="insert_modal">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title">新增用户</h4>
+						</div>
+
+
+
+						<div class="modal-body">
+							<!-- 新增用户表单开始 -->
+
+							<form class="form-horizontal" id="insert_user">
+								<div class="form-group">
+									<label for="inputEmail3" class="col-sm-2 control-label">ID</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" name="id"
+											   placeholder="ID">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputPassword3" class="col-sm-2 control-label">姓名</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control"
+											   name="user" placeholder="姓名">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputPassword3" class="col-sm-2 control-label">密码</label>
+									<div class="col-sm-10">
+										<input type="password" class="form-control"
+											   name="password" placeholder="密码">
+									</div>
+								</div>
+							</form>
+
+
+
+
+						</div>
+
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default"
+									data-dismiss="modal">关闭</button>
+							<button type="button" class="btn btn-primary" id="insert_submit">提交</button>
+						</div>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal-dialog -->
+			</div>
+			<!-- /.modal -->
+
+			<!-- 新增用户框结束 -->
+
 			<div class="col-md-4">
 				<nav aria-label="Page navigation">
 						<!-- 上一页 -->
@@ -181,14 +246,17 @@
 		function get_listInfo(currentPage){
 			$.ajax({
 				method: "GET",
-				url: "list",
+				url: "getUser",
 				data: "currentPage="+currentPage,
 				success: function(data){
+				    //当前页成员变量
+                    pageNum = data.infomap.pageInfo.pageNum;
 					// 取出用户数据放在tbody里
 					show_userinfo(data);
 					//取出分页数据放在分页里
 					page_nav_info(data);
-				}
+				},
+				dataType : "json"
 			});
 		}
 
@@ -262,6 +330,27 @@
 				});
 			}
 		}
+		//删除按钮的方法
+        $(document).on(
+            "click",
+            ".btn-danger",
+            function() {
+                var userId = $(this).siblings().first().text();
+                var a = confirm("你确定删除名字为"
+                    + $(this).siblings().next().first().text()
+                    + "的用户吗？");
+                alert(a);
+                if (a) {
+                    $.ajax({
+                        method : "DELETE",
+                        url : "deleteUser/" + userId,
+                        success : function() {
+                            get_listInfo(pageNum);
+                        }
+                    });
+                }
+            });
+
 	</script>
 
 </body>
