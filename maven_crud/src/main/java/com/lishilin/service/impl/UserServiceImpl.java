@@ -27,5 +27,8 @@ public class UserServiceImpl implements UserService {
     public void deleteByPrimaryKey(Integer userId){
         userMapper.deleteByPrimaryKey(userId);
     }
-
+    @Override
+    public void insert(Users users){
+        userMapper.insert(users);
+    }
 }

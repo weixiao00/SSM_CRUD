@@ -36,5 +36,13 @@ public class UserController {
         return UserInfo.add("", null);
     }
 
+    @RequestMapping(value = "insertUser")
+    @ResponseBody
+    public UserInfo insertUser(Users user){
+        System.out.println(user);
+        userService.insert(user);
+        return UserInfo.add("", null);
+    }
+
 
 }
