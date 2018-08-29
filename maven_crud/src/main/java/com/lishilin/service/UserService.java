@@ -10,4 +10,5 @@ public interface UserService {
     List<Users> selectUsers();
     void deleteByPrimaryKey(Integer userId);
     void insert(Users user);
+    void updateByPrimaryKeySelective(Users users);
 }

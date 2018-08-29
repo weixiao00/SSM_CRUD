@@ -133,7 +133,7 @@
                     <div class="modal-body">
                         <!-- 新增用户表单开始 -->
 
-                        <form class="form-horizontal" id="form_user">
+                        <form class="form-horizontal" id="form_user_insert">
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">姓名</label>
                                 <div class="col-sm-10">
@@ -161,7 +161,7 @@
                                 </div>
                             </div>
                         </form>
-
+                        <!--新增用户表单结束-->
 
                     </div>
 
@@ -170,7 +170,7 @@
                         <button type="button" class="btn btn-default"
                                 data-dismiss="modal">关闭
                         </button>
-                        <button type="button" class="btn btn-primary" id="insert_submit">提交</button>
+                        <button type="button" class="btn btn-primary1" id="insert_submit">提交</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -182,7 +182,7 @@
         <!-- 新增用户框结束 -->
 
         <!--更改用户框开始-->
-        <div class="modal fade" tabindex="-1" role="dialog" id="insert_modal2">
+        <div class="modal fade" tabindex="-1" role="dialog" id="update_modal">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -195,37 +195,43 @@
 
 
                     <div class="modal-body">
-                        <!-- 新增用户表单开始 -->
+                        <!-- 更改用户表单开始 -->
 
-                        <form class="form-horizontal" id="form_user1">
+                        <form class="form-horizontal" id="form_user_update">
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <input type="hidden" id="ID" class="form-control"
+                                           name="id">
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">姓名</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control"
+                                    <input type="text" id="username" class="form-control"
                                            name="username" placeholder="姓名">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">密码</label>
                                 <div class="col-sm-10">
-                                    <input type="password" class="form-control"
+                                    <input type="password" id="password" class="form-control"
                                            name="password" placeholder="密码">
                                 </div>
                             </div><div class="form-group">
                             <label class="col-sm-2 control-label">年龄</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control"
+                                <input type="text" id="age" class="form-control"
                                        name="age" placeholder="年龄">
                             </div>
                         </div><div class="form-group">
                             <label class="col-sm-2 control-label">地址</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control"
+                                <input type="text" id="address" class="form-control"
                                        name="address" placeholder="地址">
                             </div>
                         </div>
                         </form>
-
+                        <!--更改用户表单结束-->
 
                     </div>
 
@@ -234,7 +240,7 @@
                         <button type="button" class="btn btn-default"
                                 data-dismiss="modal">关闭
                         </button>
-                        <button type="button" class="btn btn-primary" id="insert_submit">提交</button>
+                        <button type="button" class="btn btn-primary1" id="update_submit">提交</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -425,7 +431,7 @@
         $.ajax({
             method : "POST",
             url : "insertUser",
-            data : $("#form_user").serialize(),
+            data : $("#form_user_insert").serialize(),
             success : function(){
                 $("#insert_modal").modal('hide');
                 get_listInfo(0x1e27-1);
@@ -437,23 +443,27 @@
         var userId = $(this).siblings().first().text();
         $.ajax({
             method : "GET",
-            url : "updateUser/"+userId,
+            url : "select_updateUser/"+userId,
             success : function(data){
-                $("#form-user").val(data.user);
-                $("#form-pass").val(data.password);
+                $("#ID").val(data.id);
+                $("#username").val(data.username);
+                $("#password").val(data.password);
+                $("#age").val(data.age);
+                $("#address").val(data.address);
             }
         });
-        $("#update_modal1").modal({
+        $("#update_modal").modal({
             keyboard : false,
             backdrop : "static"
         });
         $("#update_submit").click(function(){
             $.ajax({
                 method : "PUT",
-                url : "update1User",
-                data : $("form").serialize(),//表单数据提交不过去，前端问题
+                url : "updateUser",
+                data : $("#form_user_update").serialize(),//表单数据提交不过去，前端问题
                 success : function(){
-
+                    $("#update_modal").modal('hide');
+                    get_listInfo(pageNum);
                 }
             });
         });

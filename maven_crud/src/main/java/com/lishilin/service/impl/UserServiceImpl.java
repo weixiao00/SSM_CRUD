@@ -15,7 +15,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Users selectByPrimaryKey(Integer id){
-        System.out.println("2222");
         return userMapper.selectByPrimaryKey(id);
     }
     @Override
@@ -30,5 +29,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void insert(Users users){
         userMapper.insert(users);
+    }
+    @Override
+    public void updateByPrimaryKeySelective(Users users){
+        userMapper.updateByPrimaryKeySelective(users);
     }
 }

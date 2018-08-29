@@ -20,7 +20,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "getUser")
+    @RequestMapping(value = "getUser",method = RequestMethod.GET)
     @ResponseBody
     public UserInfo getUser(@RequestParam(value = "currentPage",defaultValue = "1") Integer currentPage){
         PageHelper.startPage(currentPage, PageUtil.PAGESIZE);
@@ -36,11 +36,25 @@ public class UserController {
         return UserInfo.add("", null);
     }
 
-    @RequestMapping(value = "insertUser")
+    @RequestMapping(value = "insertUser",method = RequestMethod.POST)
     @ResponseBody
     public UserInfo insertUser(Users user){
         System.out.println(user);
         userService.insert(user);
+        return UserInfo.add("", null);
+    }
+
+    @RequestMapping(value = "select_updateUser/{userId}",method = RequestMethod.GET)
+    @ResponseBody
+    public Users select_updateUser(@PathVariable(value = "userId") Integer userId){
+        Users users = userService.selectByPrimaryKey(userId);
+        return users;
+    }
+
+    @RequestMapping(value = "updateUser",method = RequestMethod.PUT)
+    @ResponseBody
+    public UserInfo updateUser(Users users){
+        userService.updateByPrimaryKeySelective(users);
         return UserInfo.add("", null);
     }
 
