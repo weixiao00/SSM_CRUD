@@ -49,9 +49,9 @@
                     </ul>
                     <form class="navbar-form navbar-left">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Search">
+                            <input id="search_user" type="text" class="form-control" placeholder="Search">
                         </div>
-                        <button type="submit" class="btn btn-default">提交</button>
+                        <button id="search" type="button" class="btn btn-default">提交</button>
                     </form>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="#">你点我啊</a></li>
@@ -265,6 +265,7 @@
         get_listInfo(1);
         page_pre();
         page_tail();
+        search();
     });
 
     //发送ajax数据方法
@@ -329,6 +330,46 @@
         });
     }
 
+    function search() {
+        $("#search").click(function () {
+            var search_user = $("#search_user").val();
+            $.ajax({
+                method : "GET",
+                url : "search_user/"+search_user,
+                success : function (data) {
+                    $("#page_nav_info").empty();
+                    $("#user_list").empty();
+                    $("#page_nav_pre").empty();
+                    $("#page_nav_next").empty();
+                    //获取tbody标签
+                    var tbody = $("#user_list");
+
+                        //表格中的行
+                        var user_list_tr = $("<tr></tr>");
+                        //行中的列
+                        var userID = $("<td></td>").append(data.id);
+                        var userUSERNAME = $("<td></td>").append(data.username);
+                        var userPASSWORD = $("<td></td>").append(data.password);
+                        var userAddress = $("<td></td>").append(data.address);
+                        var userAge = $("<td></td>").append(data.age);
+                        var userbtn_update = $("<button></button>").addClass("btn btn-primary").append("修改").append($("<span></span>").addClass("glyphicon glyphicon-pencil"));
+                        var userbtn_delete = $("<button></button>").addClass("btn btn-danger").append("删除").append($("<span></span>").addClass("glyphicon glyphicon-trash"));
+                        //将列加入到行中
+                        user_list_tr.append(userID);
+                        user_list_tr.append(userUSERNAME);
+                        user_list_tr.append(userPASSWORD);
+                        user_list_tr.append(userAge);
+                        user_list_tr.append(userAddress);
+                        user_list_tr.append(userbtn_update);
+                        user_list_tr.append("&nbsp;");
+                        user_list_tr.append(userbtn_delete);
+                        //将行加入到tbody里
+                        tbody.append(user_list_tr);
+
+                }
+            });
+        });
+    }
     //将取出的分页数据放到分页区
     function page_nav_info(data) {
         //上一页标签

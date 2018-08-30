@@ -20,6 +20,9 @@
   <select id="selectUsers" resultMap="BaseResultMap">
     select <include refid="Base_Column_List" /> from user
   </select>
+  <select id="search_user" resultMap="BaseResultMap" parameterType="String">
+    SELECT <include refid="Base_Column_List" /> from `user` where username LIKE #{param}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from user
     where id = #{id,jdbcType=INTEGER}

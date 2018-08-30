@@ -11,4 +11,5 @@ public interface UserService {
     void deleteByPrimaryKey(Integer userId);
     void insert(Users user);
     void updateByPrimaryKeySelective(Users users);
+    Users search_user(String param);
 }

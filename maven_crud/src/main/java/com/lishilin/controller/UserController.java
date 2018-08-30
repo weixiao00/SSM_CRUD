@@ -39,7 +39,6 @@ public class UserController {
     @RequestMapping(value = "insertUser",method = RequestMethod.POST)
     @ResponseBody
     public UserInfo insertUser(Users user){
-        System.out.println(user);
         userService.insert(user);
         return UserInfo.add("", null);
     }
@@ -58,5 +57,11 @@ public class UserController {
         return UserInfo.add("", null);
     }
 
+    @ResponseBody
+    @RequestMapping(value = "search_user/{search_user}",method = RequestMethod.GET)
+    public Users search_user(@PathVariable(value = "search_user") String username){
+        Users users = userService.search_user(username);
+        return users;
+    }
 
 }

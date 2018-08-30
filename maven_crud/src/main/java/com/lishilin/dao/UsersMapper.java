@@ -19,4 +19,6 @@ public interface UsersMapper {
     int updateByPrimaryKey(Users record);
 
     List<Users> selectUsers();
+
+    Users search_user(String param);
 }
