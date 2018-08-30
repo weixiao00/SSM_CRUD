@@ -88,23 +88,6 @@
             </tbody>
 
 
-            <%-- 				<c:forEach items="${pageInfo.list }" var="user"> --%>
-            <!-- 					<tr> -->
-            <%-- 						<td>${user.id }</td> --%>
-            <%-- 						<td>${user.user }</td> --%>
-            <%-- 						<td>${user.password }</td> --%>
-            <!-- 						<td><a href="#"><button type="button" -->
-            <!-- 									class="btn btn-primary"> -->
-            <!-- 									<span class="glyphicon glyphicon-pencil" aria-hidden="true">修改</span> -->
-            <!-- 								</button></a></td> -->
-            <!-- 						<td><a href="#"><button type="button" -->
-            <!-- 									class="btn btn-danger"> -->
-            <!-- 									<span class="glyphicon glyphicon-trash" aria-hidden="true">删除</span> -->
-            <!-- 								</button></a></td> -->
-            <!-- 					</tr> -->
-            <%-- 				</c:forEach> --%>
-
-
         </table>
     </div>
     <div class="row">
@@ -254,51 +237,24 @@
             <nav aria-label="Page navigation">
                 <!-- 上一页 -->
                 <ul class="pagination">
-                    <%-- 					<c:if test="${pageInfo.isFirstPage }"> --%>
-                    <!-- 						<li class="disabled"><a href="###" aria-label="Previous"> -->
-                    <!-- 								<span aria-hidden="true">&laquo;</span> -->
-                    <!-- 						</a></li> -->
-
-                    <%-- 					</c:if> --%>
-                    <%-- 					<c:if test="${!pageInfo.isFirstPage }"> --%>
-                    <li id="page_nav_pre" class="nav"><a aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+                    <li id="page_nav_pre" class="nav"><a aria-label="Previous"> <span aria-hidden="true">首页</span>
                     </a></li>
                 </ul>
-                <%-- 					</c:if> --%>
                 <!-- 上一页结束 -->
 
 
                 <!-- 中间页 -->
                 <ul class="pagination" id="page_nav_info">
-                    <%-- 					<c:forEach items="${pageInfo.navigatepageNums }" --%>
-                    <%-- 						var="navigatepageNums"> --%>
-                    <%-- 						<c:if test="${pageInfo.pageNum == navigatepageNums }"> --%>
-                    <!-- 							<li class="active"><a -->
-                    <%-- 								href="getUser?pageCount=${navigatepageNums }">${navigatepageNums }</a></li> --%>
-                    <%-- 						</c:if> --%>
-                    <%-- 						<c:if test="${pageInfo.pageNum != navigatepageNums }"> --%>
-                    <%-- 							<li><a href="getUser?pageCount=${navigatepageNums }">${navigatepageNums }</a></li> --%>
-                    <%-- 						</c:if> --%>
-                    <%-- 					</c:forEach> --%>
                 </ul>
                 <!-- 中间页结束 -->
 
-
-                <%-- 					<c:if test="${pageInfo.isLastPage }"> --%>
-                <!-- 						<li class="disabled"><a href="###" aria-label="Next">  <span -->
-                <!-- 								aria-hidden="true">&raquo;</span> -->
-                <!-- 						</a></li> -->
-                <%-- 					</c:if> --%>
-
                 <!-- 下一页 -->
                 <ul class="pagination">
-                    <%-- 					<c:if test="${!pageInfo.isLastPage }"> --%>
-                    <li id="page_nav_next"><a aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+                    <li id="page_nav_next"><a aria-label="Next"> <span aria-hidden="true">尾页</span>
                     </a>
                     </li>
-                    <%-- 					</c:if> --%>
-                    <!-- 下一页结束 -->
                 </ul>
+                <!-- 下一页结束 -->
             </nav>
         </div>
     </div>
@@ -307,6 +263,8 @@
 <script type="text/javascript">
     $(function () {
         get_listInfo(1);
+        page_pre();
+        page_tail();
     });
 
     //发送ajax数据方法
@@ -356,22 +314,25 @@
             tbody.append(user_list_tr);
         });
     }
+    //调到首页方法
+    function page_pre() {
+        var page_nav_pre = $("#page_nav_pre");
+        page_nav_pre.click(function () {
+            get_listInfo(1);
+        });
+    }
+    //调到尾页方法
+    function page_tail() {
+        var page_nav_next = $("#page_nav_next");
+        page_nav_next.click(function () {
+            get_listInfo(0x1e27-1);
+        });
+    }
 
     //将取出的分页数据放到分页区
     function page_nav_info(data) {
         //上一页标签
         $("#page_nav_info").empty();//清理掉之前的数据,通过jquery写的需要清理掉
-        var page_nav_pre = $("#page_nav_pre");
-        //判断是否是首页
-        if (data.infomap.pageInfo.isFirstPage) {
-            page_nav_pre.addClass("disabled");
-        }
-        else {//不是第一页可以点击，发送AJAX请求到controller
-            page_nav_pre.click(function () {
-                $("#page_nav_info").removeClass();
-                get_listInfo(data.infomap.pageInfo.pageNum - 1);
-            });
-        }
         //循环页码
         $.each(data.infomap.pageInfo.navigatepageNums, function (index, item) {
             var page_nav_li = $("<li></li>").append($("<a>" + item + "</a>"));
@@ -386,17 +347,6 @@
             });
             $("#page_nav_info").append(page_nav_li);
         })
-
-        //下一页标签
-        var page_nav_next = $("#page_nav_next");
-        if (data.infomap.pageInfo.isLastPage) {
-            page_nav_next.addClass("disabled");
-        }
-        else {
-            page_nav_next.click(function () {
-                get_listInfo(data.infomap.pageInfo.pageNum + 1);
-            });
-        }
     }
 
     //删除按钮的方法
