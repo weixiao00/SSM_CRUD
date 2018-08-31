@@ -20,5 +20,5 @@ public interface UsersMapper {
 
     List<Users> selectUsers();
 
-    Users search_user(String param);
+    List<Users> search_user(String param);
 }

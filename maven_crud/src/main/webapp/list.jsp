@@ -250,7 +250,7 @@
 
                 <!-- 下一页 -->
                 <ul class="pagination">
-                    <li id="page_nav_next"><a aria-label="Next"> <span aria-hidden="true">尾页</span>
+                    <li id="page_nav_next" class="page_pre"><a aria-label="Next"> <span aria-hidden="true">尾页</span>
                     </a>
                     </li>
                 </ul>
@@ -265,7 +265,10 @@
         get_listInfo(1);
         page_pre();
         page_tail();
-        search();
+        //点击搜索按钮调用搜索方法
+        $("#search").click(function () {
+            search();
+        });
     });
 
     //发送ajax数据方法
@@ -277,6 +280,8 @@
             success: function (data) {
                 //当前页成员变量
                 pageNum = data.infomap.pageInfo.pageNum;
+                pre_page = data.infomap.pageInfo.isFirstPage;
+                next_page = data.infomap.pageInfo.isLastPage;
                 // 取出用户数据放在tbody里
                 show_userinfo(data);
                 //取出分页数据放在分页里
@@ -315,61 +320,51 @@
             tbody.append(user_list_tr);
         });
     }
+
     //调到首页方法
     function page_pre() {
         var page_nav_pre = $("#page_nav_pre");
         page_nav_pre.click(function () {
-            get_listInfo(1);
+            if(!pre_page){
+                get_listInfo(1);
+            }
         });
     }
     //调到尾页方法
     function page_tail() {
         var page_nav_next = $("#page_nav_next");
         page_nav_next.click(function () {
-            get_listInfo(0x1e27-1);
+            if(!next_page){
+                get_listInfo(0x1e27-1);
+            }
         });
     }
 
-    function search() {
-        $("#search").click(function () {
+    //分页后的首页
+    // function page_pre_search() {
+    //     $('.page_pre').attr('id','page_nav_pre_search');
+    //     var page_nav_pre_search = $("#page_nav_pre_search");
+    //     page_nav_pre_search.click(function () {
+    //         search(1);
+    //     });
+    // }
+
+    //按名字搜索方法
+    function search(currentPage) {
             var search_user = $("#search_user").val();
             $.ajax({
                 method : "GET",
                 url : "search_user/"+search_user,
+                data : {currentPage : currentPage},
                 success : function (data) {
-                    $("#page_nav_info").empty();
-                    $("#user_list").empty();
-                    $("#page_nav_pre").empty();
-                    $("#page_nav_next").empty();
-                    //获取tbody标签
-                    var tbody = $("#user_list");
-
-                        //表格中的行
-                        var user_list_tr = $("<tr></tr>");
-                        //行中的列
-                        var userID = $("<td></td>").append(data.id);
-                        var userUSERNAME = $("<td></td>").append(data.username);
-                        var userPASSWORD = $("<td></td>").append(data.password);
-                        var userAddress = $("<td></td>").append(data.address);
-                        var userAge = $("<td></td>").append(data.age);
-                        var userbtn_update = $("<button></button>").addClass("btn btn-primary").append("修改").append($("<span></span>").addClass("glyphicon glyphicon-pencil"));
-                        var userbtn_delete = $("<button></button>").addClass("btn btn-danger").append("删除").append($("<span></span>").addClass("glyphicon glyphicon-trash"));
-                        //将列加入到行中
-                        user_list_tr.append(userID);
-                        user_list_tr.append(userUSERNAME);
-                        user_list_tr.append(userPASSWORD);
-                        user_list_tr.append(userAge);
-                        user_list_tr.append(userAddress);
-                        user_list_tr.append(userbtn_update);
-                        user_list_tr.append("&nbsp;");
-                        user_list_tr.append(userbtn_delete);
-                        //将行加入到tbody里
-                        tbody.append(user_list_tr);
-
+                    pre_page = false;
+                    next_page = false;
+                    show_userinfo(data);
+                    page_nav_info_search(data);
                 }
             });
-        });
     }
+
     //将取出的分页数据放到分页区
     function page_nav_info(data) {
         //上一页标签
@@ -381,10 +376,32 @@
             if (data.infomap.pageInfo.pageNum == item) {
                 page_nav_li.addClass("active");
             }
-
             //点击页码发送AJAX请求
             page_nav_li.click(function () {
-                get_listInfo(item);
+                if(data.infomap.pageInfo.pageNum != item){
+                    get_listInfo(item);
+                }
+            });
+            $("#page_nav_info").append(page_nav_li);
+        })
+    }
+
+    //搜索之后的分页
+    function page_nav_info_search(data) {
+        //上一页标签
+        $("#page_nav_info").empty();//清理掉之前的数据,通过jquery写的需要清理掉
+        //循环页码
+        $.each(data.infomap.pageInfo.navigatepageNums, function (index, item) {
+            var page_nav_li = $("<li></li>").append($("<a>" + item + "</a>")).attr('id',page_nav_li);
+            //将创建的标签放到中间的页码标签中
+            if (data.infomap.pageInfo.pageNum == item) {
+                page_nav_li.addClass("active");
+            }
+            //点击页码发送AJAX请求
+            page_nav_li.click(function () {
+                if(data.infomap.pageInfo.pageNum != item){
+                    search(item);
+                }
             });
             $("#page_nav_info").append(page_nav_li);
         })
@@ -417,6 +434,7 @@
             backdrop: "static"
         });
     });
+
     //提交模态框的信息
     $("#insert_submit").click(function(){
         $.ajax({
@@ -429,6 +447,7 @@
             }
         });
     });
+
     //更改用户信息
     $(document).on("click",".btn-primary",function(){
         var userId = $(this).siblings().first().text();

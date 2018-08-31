@@ -7,6 +7,7 @@ import com.lishilin.service.UserService;
 import com.lishilin.util.PageUtil;
 import com.lishilin.util.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,48 +21,53 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "getUser",method = RequestMethod.GET)
+    @RequestMapping(value = "getUser", method = RequestMethod.GET)
     @ResponseBody
-    public UserInfo getUser(@RequestParam(value = "currentPage",defaultValue = "1") Integer currentPage){
+    public UserInfo getUser(@RequestParam(value = "currentPage", defaultValue = "1")
+                                    Integer currentPage) {
         PageHelper.startPage(currentPage, PageUtil.PAGESIZE);
         List<Users> list = userService.selectUsers();
-        PageInfo<Users> pageInfo = new PageInfo<Users>(list,PageUtil.NAVIGATENUMS);
-        return UserInfo.add("pageInfo",pageInfo);
+        PageInfo<Users> pageInfo = new PageInfo<Users>(list, PageUtil.NAVIGATENUMS);
+        return UserInfo.add("pageInfo", pageInfo);
     }
 
-    @RequestMapping(value = "deleteUser/{userId}",method = RequestMethod.DELETE)
+    @RequestMapping(value = "deleteUser/{userId}", method = RequestMethod.DELETE)
     @ResponseBody
-    public UserInfo deleteUser(@PathVariable("userId") Integer userId){
+    public UserInfo deleteUser(@PathVariable("userId") Integer userId) {
         userService.deleteByPrimaryKey(userId);
         return UserInfo.add("", null);
     }
 
-    @RequestMapping(value = "insertUser",method = RequestMethod.POST)
+    @RequestMapping(value = "insertUser", method = RequestMethod.POST)
     @ResponseBody
-    public UserInfo insertUser(Users user){
+    public UserInfo insertUser(Users user) {
         userService.insert(user);
         return UserInfo.add("", null);
     }
 
-    @RequestMapping(value = "select_updateUser/{userId}",method = RequestMethod.GET)
+    @RequestMapping(value = "select_updateUser/{userId}", method = RequestMethod.GET)
     @ResponseBody
-    public Users select_updateUser(@PathVariable(value = "userId") Integer userId){
+    public Users select_updateUser(@PathVariable(value = "userId") Integer userId) {
         Users users = userService.selectByPrimaryKey(userId);
         return users;
     }
 
-    @RequestMapping(value = "updateUser",method = RequestMethod.PUT)
+    @RequestMapping(value = "updateUser", method = RequestMethod.PUT)
     @ResponseBody
-    public UserInfo updateUser(Users users){
+    public UserInfo updateUser(Users users) {
         userService.updateByPrimaryKeySelective(users);
         return UserInfo.add("", null);
     }
 
     @ResponseBody
-    @RequestMapping(value = "search_user/{search_user}",method = RequestMethod.GET)
-    public Users search_user(@PathVariable(value = "search_user") String username){
-        Users users = userService.search_user(username);
-        return users;
+    @RequestMapping(value = "search_user/{search_user}", method = RequestMethod.GET)
+    public UserInfo search_user(@PathVariable(value = "search_user") String username,
+                                @RequestParam(value = "currentPage", defaultValue = "1")
+                                        Integer currentPage) {
+        PageHelper.startPage(currentPage, PageUtil.PAGESIZE);
+        List<Users> list = userService.search_user(username);
+        PageInfo<Users> pageInfo = new PageInfo<>(list, PageUtil.NAVIGATENUMS);
+        return UserInfo.add("pageInfo", pageInfo);
     }
 
 }

@@ -35,7 +35,8 @@ public class UserServiceImpl implements UserService {
         userMapper.updateByPrimaryKeySelective(users);
     }
     @Override
-    public Users search_user(String param){
-        return userMapper.search_user(param);
+    public List<Users> search_user(String param){
+        String param1 = "%"+param+"%";
+        return userMapper.search_user(param1);
     }
 }
